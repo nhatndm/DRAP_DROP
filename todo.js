@@ -2,26 +2,21 @@ angular.module('drapApp', ['dndLists'])
       .controller('drapCtrl',function($scope){
           $scope.DBsave = [];
           $scope.pages = [{
-            name: " "
+            name: ""
           }]
           $scope.addInputPage = function(){
             $scope.pages.push({
-              name: " "
+              name: ""
             })
             if($scope.models){
               $scope.DBData = {
                 pageName : $scope.models.pageName,
-                dropzones : $scope.models.dropzones
+                dropzones : $scope.models.dropzones,
               }
               $scope.DBsave.push($scope.DBData)
               window.localStorage.setItem("abc",angular.toJson($scope.DBsave))
-              console.log(angular.fromJson(window.localStorage.getItem("abc")))
             } 
           }
-
-          setInterval(function(){
-              console.log($scope.models);
-          }, 5000);
 
           $scope.createForm = function(page){
                 $scope.models = {
@@ -36,10 +31,12 @@ angular.module('drapApp', ['dndLists'])
                   }
               };
               if(angular.fromJson(window.localStorage.getItem("abc"))){
+                  let template = $scope.models.templates;
                   let data = angular.fromJson(window.localStorage.getItem("abc"))
                   for(var item in data){
                     if(data[item].pageName.name == page.name){
                       $scope.models = data[item]; 
+                      $scope.models.templates = template;
                     }
                   }
               }
@@ -50,6 +47,9 @@ angular.module('drapApp', ['dndLists'])
           }
           
           $scope.models = {
+              pageName: {
+                name : ''
+              },
               selected: null,
               templates: [
                   {type: "item", id: 2},
@@ -60,7 +60,18 @@ angular.module('drapApp', ['dndLists'])
               }
           };
 
-          $scope.$watch('models.dropzones', function(model) {
-              $scope.modelAsJson = angular.toJson(model, true);
+          $scope.$watch('models', function(model) {
+              $scope.modelAsJson = angular.fromJson(model, true); 
+              var data = angular.fromJson(window.localStorage.getItem("abc"))
+              if(data != null){
+                for(i in data){
+                  if(data[i].pageName != ' '){
+                      if(data[i].pageName.name == $scope.modelAsJson.pageName.name){
+                        data[i].dropzones = $scope.modelAsJson.dropzones;
+                        window.localStorage.setItem("abc",angular.toJson(data))
+                      }
+                  }
+                }
+              }
           }, true);        
       });
