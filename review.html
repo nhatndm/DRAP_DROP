@@ -1,0 +1,50 @@
+<!doctype html>
+<html ng-app="drapApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
+    <script src="todo.js"></script>
+    <script src="angular-drag-and-drop-lists.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="nested/nested.css">
+    <script src="nested/nested.js"></script>
+  </head>
+  <body ng-controller="drapCtrl">
+        <div class="container-fluid">
+            <div class="row">
+            <div class="col-sm-2">    
+                <div class="well nestedDemo">
+                    <div class="toolbox box box-grey box-padding">
+                        <ul>
+                            <!-- The toolbox only allows to copy objects, not move it. After a new
+                                element was created, dnd-copied is invoked and we generate the next id -->
+                            <li ng-repeat="item in models.templates"
+                                dnd-draggable="item"
+                                dnd-effect-allowed="copy"
+                                dnd-copied="item.id = item.id + 1"
+                                >
+                                <button type="button" class="btn btn-success" style="width: 100%">{{item.type}}</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="trashcan box box-grey box-padding text-center">
+                        <!-- If you use [] as referenced list, the dropped elements will be lost -->
+                        <h3>Trash</h3>
+                        <ul dnd-list="[]">
+                            <li><img src="nested/trash.png" style="width: 70px;height: 70px"></li>
+                        </ul>
+                    </div>   
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <h1>Preview</h1>
+                <div class="nestedDemo row well" ng-include="'nested/nested.html'" style="margin-top: 50px"></div>
+            </div>
+            </div>
+        </div>
+  </body>
+</html>
+
+    
